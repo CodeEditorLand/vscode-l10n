@@ -1,10 +1,32 @@
 {
+  "name": "@vscode/l10n-dev",
+  "version": "0.0.34",
+  "description": "Development time npm module to generate strings bundles from TypeScript files",
+  "bugs": {
+    "url": "https://github.com/Microsoft/vscode-l10n/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-l10n.git"
+  },
+  "license": "MIT",
   "author": "Microsoft Corporation",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "bin": {
     "vscode-l10n-dev": "./dist/cli.js"
   },
-  "bugs": {
-    "url": "https://github.com/Microsoft/vscode-l10n/issues"
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
+    "build-wasm-tsx": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/tsx && mv ./tree-sitter-tsx.wasm ./src/ast/tree-sitter-tsx.wasm",
+    "build-wasm-typescript": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/typescript && mv ./tree-sitter-typescript.wasm ./src/ast/tree-sitter-typescript.wasm",
+    "clean": "rimraf dist && rimraf lib",
+    "compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
+    "prepublishOnly": "npm run lint && npm run compile && npm run test",
+    "watch": "node .esbuild.config.mjs --watch"
   },
   "dependencies": {
     "@azure-rest/ai-translation-text": "1.0.0-beta.1",
@@ -18,7 +40,6 @@
     "xml2js": "0.5.0",
     "yargs": "17.7.1"
   },
-  "description": "Development time npm module to generate strings bundles from TypeScript files",
   "devDependencies": {
     "@microsoft/api-extractor": "7.32.1",
     "@types/debug": "4.1.7",
@@ -35,26 +56,5 @@
     "tree-sitter-cli": "0.20.7",
     "tree-sitter-typescript": "0.20.1",
     "ts-jest": "29.1.1"
-  },
-  "files": [
-    "dist/*"
-  ],
-  "license": "MIT",
-  "main": "dist/main.js",
-  "name": "@vscode/l10n-dev",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/vscode-l10n.git"
-  },
-  "scripts": {
-    "build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
-    "build-wasm-tsx": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/tsx && mv ./tree-sitter-tsx.wasm ./src/ast/tree-sitter-tsx.wasm",
-    "build-wasm-typescript": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/typescript && mv ./tree-sitter-typescript.wasm ./src/ast/tree-sitter-typescript.wasm",
-    "clean": "rimraf dist && rimraf lib",
-    "compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
-    "prepublishOnly": "npm run lint && npm run compile && npm run test",
-    "watch": "node .esbuild.config.mjs --watch"
-  },
-  "types": "dist/main.d.ts",
-  "version": "0.0.34"
+  }
 }

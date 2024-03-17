@@ -1,13 +1,32 @@
 {
+  "name": "@vscode/l10n",
+  "version": "0.0.18",
+  "description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
+  "bugs": {
+    "url": "https://github.com/Microsoft/vscode-l10n/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-l10n.git"
+  },
+  "license": "MIT",
   "author": "Microsoft Corporation",
+  "sideEffects": false,
+  "main": "./dist/main.js",
   "browser": {
     "./dist/main.js": "./dist/browser.js",
     "./src/node/reader": "./src/browser/reader"
   },
-  "bugs": {
-    "url": "https://github.com/Microsoft/vscode-l10n/issues"
+  "types": "dist/main.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "clean": "rimraf dist && rimraf lib",
+    "compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
+    "prepublishOnly": "npm run lint && npm run compile && npm run test",
+    "watch": "node .esbuild.config.js --watch"
   },
-  "description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
   "devDependencies": {
     "@jest/globals": "29.7.0",
     "@microsoft/api-extractor": "7.32.1",
@@ -22,24 +41,5 @@
     "rimraf": "3.0.2",
     "ts-jest": "29.1.1",
     "typescript": "4.7.4"
-  },
-  "files": [
-    "dist/*"
-  ],
-  "license": "MIT",
-  "main": "./dist/main.js",
-  "name": "@vscode/l10n",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/vscode-l10n.git"
-  },
-  "scripts": {
-    "clean": "rimraf dist && rimraf lib",
-    "compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
-    "prepublishOnly": "npm run lint && npm run compile && npm run test",
-    "watch": "node .esbuild.config.js --watch"
-  },
-  "sideEffects": false,
-  "types": "dist/main.d.ts",
-  "version": "0.0.18"
+  }
 }

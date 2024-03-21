@@ -1,39 +1,6 @@
 {
-	"name": "@vscode/l10n-dev",
-	"version": "0.0.1",
-	"private": false,
-	"description": "Development time npm module to generate strings bundles from TypeScript files",
-	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
-	"bugs": {
-		"url": "https://github.com/CodeEditorLand/Foundation/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "Playform",
-		"email": "Hello@Playform.Cloud",
-		"url": "https://playform.cloud"
-	},
-	"type": "module",
-	"main": "dist/main.js",
-	"types": "dist/main.d.ts",
 	"bin": {
 		"vscode-l10n-dev": "./dist/cli.js"
-	},
-	"files": [
-		"dist/*"
-	],
-	"scripts": {
-		"build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
-		"build-wasm-tsx": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/tsx && mv ./tree-sitter-tsx.wasm ./src/ast/tree-sitter-tsx.wasm",
-		"build-wasm-typescript": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/typescript && mv ./tree-sitter-typescript.wasm ./src/ast/tree-sitter-typescript.wasm",
-		"clean": "rimraf dist && rimraf lib",
-		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"watch": "node .esbuild.config.mjs --watch"
 	},
 	"dependencies": {
 		"@azure-rest/ai-translation-text": "1.0.0-beta.1",
@@ -47,6 +14,7 @@
 		"xml2js": "0.6.2",
 		"yargs": "17.7.2"
 	},
+	"description": "Development time npm module to generate strings bundles from TypeScript files",
 	"devDependencies": {
 		"@microsoft/api-extractor": "7.43.0",
 		"@types/debug": "4.1.12",
@@ -65,7 +33,20 @@
 		"ts-jest": "29.1.2",
 		"typescript-esbuild": "0.4.5"
 	},
-	"publishConfig": {
-		"access": "public"
-	}
+	"files": [
+		"dist/*"
+	],
+	"main": "dist/main.js",
+	"name": "@vscode/l10n-dev",
+	"scripts": {
+		"build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
+		"build-wasm-tsx": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/tsx && mv ./tree-sitter-tsx.wasm ./src/ast/tree-sitter-tsx.wasm",
+		"build-wasm-typescript": "tree-sitter build-wasm ./node_modules/tree-sitter-typescript/typescript && mv ./tree-sitter-typescript.wasm ./src/ast/tree-sitter-typescript.wasm",
+		"clean": "rimraf dist && rimraf lib",
+		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"watch": "node .esbuild.config.mjs --watch"
+	},
+	"type": "module",
+	"types": "dist/main.d.ts"
 }

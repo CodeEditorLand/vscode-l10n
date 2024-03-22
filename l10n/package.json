@@ -1,9 +1,39 @@
 {
+	"name": "@vscode/l10n",
+	"version": "0.0.1",
+	"private": false,
+	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"sideEffects": false,
+	"type": "module",
+	"main": "./dist/main.js",
 	"browser": {
 		"./dist/main.js": "./dist/browser.js",
 		"./src/node/reader": "./src/browser/reader"
 	},
-	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
+	"types": "dist/main.d.ts",
+	"files": [
+		"dist/*"
+	],
+	"scripts": {
+		"clean": "rimraf dist && rimraf lib",
+		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"watch": "node .esbuild.config.js --watch"
+	},
 	"devDependencies": {
 		"@jest/globals": "29.7.0",
 		"@microsoft/api-extractor": "7.43.0",
@@ -20,18 +50,7 @@
 		"typescript": "5.4.2",
 		"typescript-esbuild": "0.4.5"
 	},
-	"files": [
-		"dist/*"
-	],
-	"main": "./dist/main.js",
-	"name": "@vscode/l10n",
-	"scripts": {
-		"clean": "rimraf dist && rimraf lib",
-		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"watch": "node .esbuild.config.js --watch"
-	},
-	"sideEffects": false,
-	"type": "module",
-	"types": "dist/main.d.ts"
+	"publishConfig": {
+		"access": "public"
+	}
 }

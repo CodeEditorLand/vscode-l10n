@@ -1,17 +1,42 @@
 {
+	"name": "@vscode/l10n",
+	"version": "0.0.1",
+	"private": false,
+	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
+	"keywords": [
+		"land"
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandL10n#readme",
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandL10n/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandL10n.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
 	"author": {
-		"email": "Land@PlayForm.Cloud",
 		"name": "🌆 — Land —",
+		"email": "Land@PlayForm.Cloud",
 		"url": "HTTPS://Land.PlayForm.Cloud"
 	},
+	"sideEffects": false,
+	"type": "module",
+	"main": "./dist/main.js",
 	"browser": {
 		"./dist/main.js": "./dist/browser.js",
 		"./src/node/reader": "./src/browser/reader"
 	},
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandL10n/issues"
+	"types": "dist/main.d.ts",
+	"files": [
+		"dist/*"
+	],
+	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
+		"clean": "rimraf dist && rimraf lib",
+		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
+		"prepublishOnly": "Build 'Source/**/*.ts'"
 	},
-	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
 	"devDependencies": {
 		"@playform/build": "0.0.7",
 		"@playform/document": "0.0.6",
@@ -23,32 +48,7 @@
 		"mock-fs": "5.2.0",
 		"rimraf": "5.0.5"
 	},
-	"files": [
-		"dist/*"
-	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandL10n#readme",
-	"keywords": [
-		"land"
-	],
-	"license": "SEE LICENSE IN LICENSE",
-	"main": "./dist/main.js",
-	"name": "@vscode/l10n",
-	"private": false,
 	"publishConfig": {
 		"access": "public"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandL10n.git"
-	},
-	"scripts": {
-		"Document": "Document 'Source/**/*.ts'",
-		"clean": "rimraf dist && rimraf lib",
-		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
-		"prepublishOnly": "Build 'Source/**/*.ts'"
-	},
-	"sideEffects": false,
-	"type": "module",
-	"types": "dist/main.d.ts",
-	"version": "0.0.1"
+	}
 }

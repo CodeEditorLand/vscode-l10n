@@ -3,19 +3,22 @@
 	"version": "0.0.1",
 	"private": false,
 	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
-	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"keywords": [
+		"land"
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandL10n#readme",
 	"bugs": {
-		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandL10n/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandL10n.git"
 	},
 	"license": "SEE LICENSE IN LICENSE",
 	"author": {
-		"name": "Playform",
-		"email": "Hello@Playform.Cloud",
-		"url": "https://playform.cloud"
+		"name": "🌆 — Land —",
+		"email": "Land@PlayForm.Cloud",
+		"url": "HTTPS://Land.PlayForm.Cloud"
 	},
 	"sideEffects": false,
 	"type": "module",
@@ -29,26 +32,21 @@
 		"dist/*"
 	],
 	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
 		"clean": "rimraf dist && rimraf lib",
 		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"watch": "node .esbuild.config.js --watch"
+		"prepublishOnly": "Build 'Source/**/*.ts'"
 	},
 	"devDependencies": {
-		"@jest/globals": "29.7.0",
-		"@microsoft/api-extractor": "7.43.0",
+		"@playform/build": "0.0.7",
+		"@playform/document": "0.0.6",
 		"@types/mock-fs": "4.13.4",
 		"@types/node": "20",
 		"esbuild": "0.20.2",
 		"http-proxy-agent": "7.0.2",
 		"https-proxy-agent": "7.0.4",
-		"jest": "29.7.0",
-		"jest-fetch-mock": "3.0.3",
 		"mock-fs": "5.2.0",
-		"rimraf": "5.0.5",
-		"ts-jest": "29.1.2",
-		"typescript": "5.4.2",
-		"typescript-esbuild": "0.4.5"
+		"rimraf": "5.0.5"
 	},
 	"publishConfig": {
 		"access": "public"

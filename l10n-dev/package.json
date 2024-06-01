@@ -1,23 +1,46 @@
 {
 	"name": "@vscode/l10n-dev",
+	"version": "0.0.35",
 	"description": "Development time npm module to generate strings bundles from TypeScript files",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-l10n.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-l10n/issues"
+	},
 	"main": "dist/main.js",
 	"types": "dist/main.d.ts",
-	"bin": {
-		"vscode-l10n-dev": "./dist/cli.js"
-	},
 	"files": [
 		"dist/*"
 	],
-	"scripts": {
-		"build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
-		"build-wasm-tsx": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/tsx --output ./src/ast/tree-sitter-tsx.wasm",
-		"build-wasm-typescript": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/typescript --output ./src/ast/tree-sitter-typescript.wasm",
-		"clean": "rimraf dist && rimraf lib",
-		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
-		"prepublishOnly": "npm run lint && npm run compile && npm run test"
+	"bin": {
+		"vscode-l10n-dev": "./dist/cli.js"
+	},
+	"devDependencies": {
+		"@microsoft/api-extractor": "^7.32.1",
+		"@types/debug": "^4.1.7",
+		"@types/markdown-it": "^13.0.7",
+		"@types/mock-fs": "^4.13.1",
+		"@types/node": "14.17.1",
+		"@types/xml2js": "^0.4.2",
+		"@types/yargs": "^17.0.7",
+		"@typescript-eslint/eslint-plugin": "^4.28.0",
+		"@typescript-eslint/parser": "^4.28.0",
+		"esbuild": "^0.15.5",
+		"esbuild-copy-files-plugin": "^1.1.0",
+		"eslint": "^7.29.0",
+		"jest": "^29.7.0",
+		"mock-fs": "^5.1.4",
+		"rimraf": "^3.0.2",
+		"tree-sitter-cli": "^0.22.2",
+		"tree-sitter-typescript": "^0.20.1",
+		"ts-jest": "^29.1.1"
 	},
 	"dependencies": {
+		"@azure-rest/ai-translation-text": "^1.0.0-beta.1",
 		"debug": "^4.3.4",
 		"deepmerge-json": "^1.5.0",
 		"glob": "^10.0.0",
@@ -28,18 +51,15 @@
 		"xml2js": "^0.5.0",
 		"yargs": "^17.7.1"
 	},
-	"devDependencies": {
-		"@types/debug": "^4.1.7",
-		"@types/markdown-it": "^13.0.7",
-		"@types/mock-fs": "^4.13.1",
-		"@types/node": "14.17.1",
-		"@types/xml2js": "^0.4.2",
-		"@types/yargs": "^17.0.7",
-		"esbuild": "^0.15.5",
-		"esbuild-copy-files-plugin": "^1.1.0",
-		"mock-fs": "^5.1.4",
-		"rimraf": "^3.0.2",
-		"tree-sitter-cli": "^0.22.2",
-		"tree-sitter-typescript": "^0.20.1"
+	"scripts": {
+		"build-wasm-typescript": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/typescript --output ./src/ast/tree-sitter-typescript.wasm",
+		"build-wasm-tsx": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/tsx --output ./src/ast/tree-sitter-tsx.wasm",
+		"build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
+		"clean": "rimraf dist && rimraf lib",
+		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
+		"lint": "eslint src --ext ts",
+		"watch": "node .esbuild.config.mjs --watch",
+		"test": "jest --preset ts-jest",
+		"prepublishOnly": "npm run lint && npm run compile && npm run test"
 	}
 }

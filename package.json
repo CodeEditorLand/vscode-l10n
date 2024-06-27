@@ -7,6 +7,6 @@
 		"watch:l10n-dev": "cd l10n-dev && npm run watch"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.5"
+		"@types/node": "20.14.9"
 	}
 }

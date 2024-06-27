@@ -1,19 +1,12 @@
 {
 	"name": "vscode-l10n",
-	"private": true,
 	"scripts": {
-		"postinstall": "npm run install:l10n && npm run install:l10n-dev",
 		"install:l10n": "cd l10n && npm install",
 		"install:l10n-dev": "cd l10n-dev && npm install",
-		"watch:l10n-dev": "cd l10n-dev && npm run watch",
 		"watch:l10n": "cd l10n-dev && npm run watch",
-		"test": "jest"
+		"watch:l10n-dev": "cd l10n-dev && npm run watch"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.5",
-		"jest": "29.7.0",
-		"ts-jest": "29.1.5",
-		"ts-node": "10.9.2",
-		"typescript": "5.4.5"
+		"@types/node": "20.14.5"
 	}
 }

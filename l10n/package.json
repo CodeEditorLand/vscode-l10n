@@ -1,50 +1,28 @@
 {
-  "name": "@vscode/l10n",
-  "version": "0.0.18",
-  "description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
-  "author": "Microsoft Corporation",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/vscode-l10n.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Microsoft/vscode-l10n/issues"
-  },
-  "main": "./dist/main.js",
-  "sideEffects": false,
-  "browser": {
-    "./dist/main.js": "./dist/browser.js",
-    "./src/node/reader": "./src/browser/reader"
-  },
-  "types": "dist/main.d.ts",
-  "files": [
-    "dist/*"
-  ],
-  "devDependencies": {
-    "@jest/globals": "29.7.0",
-    "@microsoft/api-extractor": "7.47.0",
-    "@types/mock-fs": "4.13.4",
-    "@types/node": "20",
-    "@typescript-eslint/eslint-plugin": "7.13.1",
-    "@typescript-eslint/parser": "7.13.1",
-    "esbuild": "0.21.5",
-    "eslint": "9.5.0",
-    "http-proxy-agent": "7.0.2",
-    "https-proxy-agent": "7.0.4",
-    "jest": "29.7.0",
-    "jest-fetch-mock": "3.0.3",
-    "mock-fs": "5.2.0",
-    "rimraf": "5.0.7",
-    "ts-jest": "29.1.5",
-    "typescript": "5.4.5"
-  },
-  "scripts": {
-    "clean": "rimraf dist && rimraf lib",
-    "compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
-    "lint": "eslint src --ext ts",
-    "watch": "node .esbuild.config.js --watch",
-    "test": "jest --preset ts-jest",
-    "prepublishOnly": "npm run lint && npm run compile && npm run test"
-  }
+	"name": "@vscode/l10n",
+	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
+	"sideEffects": false,
+	"main": "./dist/main.js",
+	"browser": {
+		"./dist/main.js": "./dist/browser.js",
+		"./src/node/reader": "./src/browser/reader"
+	},
+	"types": "dist/main.d.ts",
+	"files": [
+		"dist/*"
+	],
+	"scripts": {
+		"clean": "rimraf dist && rimraf lib",
+		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
+		"prepublishOnly": "npm run lint && npm run compile && npm run test"
+	},
+	"devDependencies": {
+		"@types/mock-fs": "4.13.4",
+		"@types/node": "20",
+		"esbuild": "0.21.5",
+		"http-proxy-agent": "7.0.2",
+		"https-proxy-agent": "7.0.4",
+		"mock-fs": "5.2.0",
+		"rimraf": "5.0.7"
+	}
 }

@@ -1,28 +1,28 @@
 {
+	"name": "@vscode/l10n",
+	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
+	"sideEffects": false,
+	"main": "./dist/main.js",
 	"browser": {
 		"./dist/main.js": "./dist/browser.js",
 		"./src/node/reader": "./src/browser/reader"
 	},
-	"description": "A helper library to assist in localizing subprocesses spun up by VS Code extensions",
-	"devDependencies": {
-		"@types/mock-fs": "^4.13.1",
-		"@types/node": "^18",
-		"esbuild": "^0.15.5",
-		"http-proxy-agent": "^5.0.0",
-		"https-proxy-agent": "^5.0.1",
-		"mock-fs": "^5.1.4",
-		"rimraf": "^3.0.2"
-	},
+	"types": "dist/main.d.ts",
 	"files": [
 		"dist/*"
 	],
-	"main": "./dist/main.js",
-	"name": "@vscode/l10n",
 	"scripts": {
 		"clean": "rimraf dist && rimraf lib",
 		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.js",
 		"prepublishOnly": "npm run lint && npm run compile && npm run test"
 	},
-	"sideEffects": false,
-	"types": "dist/main.d.ts"
+	"devDependencies": {
+		"@types/mock-fs": "4.13.4",
+		"@types/node": "20",
+		"esbuild": "0.23.0",
+		"http-proxy-agent": "7.0.2",
+		"https-proxy-agent": "7.0.5",
+		"mock-fs": "5.2.0",
+		"rimraf": "6.0.1"
+	}
 }

@@ -1,6 +1,6 @@
 {
 	"devDependencies": {
-		"@types/node": "^18.7.8"
+		"@types/node": "22.4.0"
 	},
 	"name": "vscode-l10n",
 	"scripts": {
@@ -8,8 +8,5 @@
 		"install:l10n-dev": "cd l10n-dev && npm install",
 		"watch:l10n": "cd l10n-dev && npm run watch",
 		"watch:l10n-dev": "cd l10n-dev && npm run watch"
-	},
-	"devDependencies": {
-		"@types/node": "22.4.0"
 	}
 }

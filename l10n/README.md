@@ -10,7 +10,7 @@ extraction tooling.
 > You should _NOT_ use this library in your extension's main process. The
 > translations are loaded into the main process by VS Code itself.
 
-## Usage
+## 🛠️ Usage
 
 ```typescript
 import * as l10n from "@vscode/l10n";

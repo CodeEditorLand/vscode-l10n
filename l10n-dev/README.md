@@ -8,7 +8,7 @@ extracting strings in usages of:
 -   `l10n.t(...)` from the
     [l10n subprocess library](https://github.com/microsoft/vscode-l10n/tree/main/l10n)
 
-## Usage
+## 🛠️ Usage
 
 ### As a CLI
 

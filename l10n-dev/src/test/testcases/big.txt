@@ -1,0 +1,10 @@
+import { l10n } from "vscode";
+
+l10n.t("Hello World");
+l10n.t('foo\'bar');
+l10n.t('foo\"bar');
+l10n.t('foo\nbaz');
+l10n.t({
+    message: 'foobar',
+    comment: ['foobar', 'barfoo']
+});

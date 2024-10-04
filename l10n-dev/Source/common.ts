@@ -8,10 +8,12 @@
  * The format of a message in a bundle.
  */
 
-export type l10nJsonMessageFormat = string | {
-	message: string;
-	comment: string[];
-};
+export type l10nJsonMessageFormat =
+	| string
+	| {
+			message: string;
+			comment: string[];
+	  };
 
 /**
  * @public

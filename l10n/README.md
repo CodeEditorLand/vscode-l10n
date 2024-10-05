@@ -1,10 +1,14 @@
 # @vscode/l10n
 
-Library used for loading the translations into subprocesses of your extension. These usages also get picked up by [l10n-dev](https://github.com/microsoft/vscode-l10n/tree/main/l10n-dev) string extraction tooling.
+Library used for loading the translations into subprocesses of your extension.
+These usages also get picked up by
+[l10n-dev](https://github.com/microsoft/vscode-l10n/tree/main/l10n-dev) string
+extraction tooling.
 
 > **Note**
 >
-> You should _NOT_ use this library in your extension's main process. The translations are loaded into the main process by VS Code itself.
+> You should _NOT_ use this library in your extension's main process. The
+> translations are loaded into the main process by VS Code itself.
 
 ## Usage
 
@@ -38,5 +42,8 @@ l10n.t({
 });
 ```
 
-The input for `l10n.config` pairs nicely with the `bundle` and `uri` properties on the `l10n` namespace that are provided by the [VS Code API](https://code.visualstudio.com/api/references/vscode-api#l10n).
-You should send the value of one of these properties from your extension to your subprocess that is consuming `@vscode/l10n`.
+The input for `l10n.config` pairs nicely with the `bundle` and `uri` properties
+on the `l10n` namespace that are provided by the
+[VS Code API](https://code.visualstudio.com/api/references/vscode-api#l10n). You
+should send the value of one of these properties from your extension to your
+subprocess that is consuming `@vscode/l10n`.

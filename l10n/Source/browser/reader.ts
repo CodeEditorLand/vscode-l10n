@@ -4,14 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 export async function readFileFromUri(uri: URL): Promise<string> {
-    if (uri.protocol === 'http:' || uri.protocol === 'https:') {
-        const res = await fetch(uri);
-        return await res.text();
-    }
-    throw new Error('Unsupported protocol');
+	if (uri.protocol === "http:" || uri.protocol === "https:") {
+		const res = await fetch(uri);
+		return await res.text();
+	}
+	throw new Error("Unsupported protocol");
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function readFileFromFsPath(_: string): string {
-    throw new Error('Unsupported in browser');
+	throw new Error("Unsupported in browser");
 }

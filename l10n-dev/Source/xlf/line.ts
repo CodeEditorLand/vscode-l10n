@@ -8,7 +8,7 @@ export class Line {
 
 	constructor(indent = 0) {
 		if (indent > 0) {
-			this.buffer.push(new Array(indent + 1).join(' '));
+			this.buffer.push(new Array(indent + 1).join(" "));
 		}
 	}
 
@@ -18,6 +18,6 @@ export class Line {
 	}
 
 	public toString(): string {
-		return this.buffer.join('');
+		return this.buffer.join("");
 	}
 }

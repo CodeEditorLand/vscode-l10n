@@ -62,7 +62,11 @@ ${assignmentExpressionRequireQuery}
 ${importQuery}`;
 
 // Gets a query that will find and extract all t() calls into @message and @comment
-export function getTQuery({ vscode = 'vscode', l10n = 'l10n', t = 't' }: IAlternativeVariableNames): string {
+export function getTQuery({
+	vscode = "vscode",
+	l10n = "l10n",
+	t = "t",
+}: IAlternativeVariableNames): string {
 	return `(call_expression
 		(member_expression
 			object: [

@@ -12,10 +12,14 @@ export function pseudoLocalizedTranslate(
 ): l10nJsonFormat {
 	// deep clone
 	const contents = JSON.parse(JSON.stringify(dataToLocalize));
+
 	for (const key of Object.keys(contents)) {
 		const value = contents[key];
+
 		const message = typeof value === "string" ? value : value!.message;
+
 		let index = 0;
+
 		let localized = "";
 		// escape command and icon syntax
 		for (const match of message.matchAll(

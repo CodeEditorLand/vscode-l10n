@@ -45,7 +45,9 @@ export async function getL10nJson(
 
 	// Create a Set to keep track of keys that have been seen before
 	const seenKeys = new Set<string>();
+
 	const bundles: l10nJsonFormat[] = [];
+
 	for (const contents of fileContents) {
 		const result = await analyzer.analyze(contents);
 		bundles.push(result);
@@ -63,7 +65,9 @@ export async function getL10nJson(
 	}
 
 	logger.debug("Analyzed script files.");
+
 	const mergedJson: l10nJsonFormat = merge.multi({}, ...bundles);
+
 	return mergedJson;
 }
 
@@ -79,13 +83,16 @@ export function getL10nXlf(
 	options?: L10nToXlfOptions,
 ): string {
 	logger.debug(`Analyzing ${l10nFileContents.size} L10N files...`);
+
 	const xlf = new XLF(options);
+
 	for (const [name, l10nBundle] of l10nFileContents) {
 		logger.debug(`Adding file ${name}...`);
 		xlf.addFile(name, l10nBundle);
 		logger.debug(`Added file ${name}.`);
 	}
 	logger.debug("Analyzed L10N files.");
+
 	return xlf.toString();
 }
 
@@ -99,12 +106,14 @@ export async function getL10nFilesFromXlf(
 	xlfContents: string,
 ): Promise<l10nJsonDetails[]> {
 	logger.debug("Parsing XLF content...");
+
 	const details = await XLF.parse(xlfContents);
 	logger.debug(`Parsed XLF contents into ${details.length}.`);
 	details.forEach((detail) => {
 		logger.debug(
 			`Found ${detail.language} file with ${Object.keys(detail.messages).length} messages called '${detail.name}'.`,
 		);
+
 		switch (detail.language) {
 			// Fix up the language codes for the languages we ship as language packs
 			case "zh-hans":
@@ -113,18 +122,23 @@ export async function getL10nFilesFromXlf(
 				logger.debug(
 					`Changed 'zh-hans' to 'zh-cn' for file: ${detail.name}.`,
 				);
+
 				break;
+
 			case "zh-hant":
 				// https://github.com/microsoft/vscode-loc/blob/ee1a0b34bb545253a8a28e6d21193052c478e32d/i18n/vscode-language-pack-zh-hant/package.json#L22
 				detail.language = "zh-tw";
 				logger.debug(
 					`Changed 'zh-hant' to 'zh-tw' for file: ${detail.name}.`,
 				);
+
 				break;
+
 			default:
 				break;
 		}
 	});
+
 	return details;
 }
 
@@ -141,6 +155,7 @@ export function getL10nPseudoLocalized(
 
 	const result = pseudoLocalizedTranslate(dataToLocalize);
 	logger.debug(`Pseudo-localized ${Object.keys(result).length} strings.`);
+
 	return result;
 }
 
@@ -164,6 +179,7 @@ export async function getL10nAzureLocalized(
 		languages,
 		config,
 	);
+
 	if (result.length) {
 		logger.debug(
 			`Localized ${Object.keys(result[0]!).length * languages.length} strings.`,

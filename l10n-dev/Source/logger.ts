@@ -23,10 +23,14 @@ export const logger = {
 		switch (level) {
 			case LogLevel.Debug:
 				debug.enable(LogLevel.Debug);
+
 				break;
+
 			case LogLevel.Verbose:
 				debug.enable(LogLevel.Verbose);
+
 				break;
+
 			default:
 				break;
 		}

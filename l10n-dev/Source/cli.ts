@@ -224,6 +224,7 @@ export async function l10nExportStrings(
 		),
 		GLOB_DEFAULTS,
 	);
+
 	const tsFileContents = matches.map((m) => ({
 		extension: path.extname(m),
 		contents: readFileSync(path.resolve(m), "utf8"),
@@ -231,22 +232,27 @@ export async function l10nExportStrings(
 
 	if (!tsFileContents.length) {
 		logger.log("No TypeScript files found.");
+
 		return;
 	}
 
 	logger.log(
 		`Found ${tsFileContents.length} TypeScript files. Extracting strings...`,
 	);
+
 	const jsonResult = await getL10nJson(tsFileContents);
 
 	const stringsFound = Object.keys(jsonResult).length;
+
 	if (!stringsFound) {
 		logger.log("No strings found. Skipping writing to a bundle.l10n.json.");
+
 		return;
 	}
 	logger.log(`Extracted ${stringsFound} strings...`);
 
 	let packageJSON;
+
 	try {
 		packageJSON = JSON.parse(
 			readFileSync("package.json").toString("utf-8"),
@@ -272,6 +278,7 @@ export async function l10nExportStrings(
 			console.debug(
 				"No package.json found in directory and no outDir specified. Using the current directory.",
 			);
+
 			return;
 		}
 		outDir = outDir ?? ".";
@@ -305,6 +312,7 @@ export function l10nGenerateXlf(
 	);
 
 	const l10nFileContents = new Map<string, l10nJsonFormat>();
+
 	for (const match of matches) {
 		if (match.endsWith(".l10n.json")) {
 			const name = path.basename(match).split(".l10n.json")[0] ?? "";
@@ -322,6 +330,7 @@ export function l10nGenerateXlf(
 
 	if (!l10nFileContents.size) {
 		logger.log("No L10N JSON files found so skipping generating XLF.");
+
 		return;
 	}
 	logger.log(
@@ -347,15 +356,19 @@ export async function l10nImportXlf(
 		),
 		GLOB_DEFAULTS,
 	);
+
 	const xlfFiles = matches.map((m) => readFileSync(path.resolve(m), "utf8"));
+
 	if (!xlfFiles.length) {
 		logger.log("No XLF files found.");
+
 		return;
 	}
 
 	logger.log(
 		`Found ${xlfFiles.length} XLF files. Generating localized L10N JSON files...`,
 	);
+
 	let count = 0;
 
 	if (xlfFiles.length) {
@@ -365,6 +378,7 @@ export async function l10nImportXlf(
 	for (const xlfContents of xlfFiles) {
 		const details = await getL10nFilesFromXlf(xlfContents);
 		count += details.length;
+
 		for (const detail of details) {
 			const type = detail.name === "package" ? "nls" : "l10n";
 			writeFileSync(
@@ -401,6 +415,7 @@ export function l10nGeneratePseudo(paths: string[], language: string): void {
 		const contents = getL10nPseudoLocalized(
 			JSON.parse(readFileSync(path.resolve(match), "utf8")),
 		);
+
 		if (match.endsWith(".l10n.json")) {
 			const name = path.basename(match).split(".l10n.json")[0] ?? "";
 			writeFileSync(
@@ -427,6 +442,7 @@ export function l10nGeneratePseudo(paths: string[], language: string): void {
 
 	if (!matches.length) {
 		logger.log("No L10N JSON files.");
+
 		return;
 	}
 	logger.log(`Wrote ${matches.length} L10N JSON files.`);
@@ -459,8 +475,10 @@ export async function l10nGenerateTranslationService(
 			languages,
 			{ azureTranslatorKey: key, azureTranslatorRegion: region },
 		);
+
 		for (let i = 0; i < languages.length; i++) {
 			const language = languages[i];
+
 			if (match.endsWith(".l10n.json")) {
 				const name = path.basename(match).split(".l10n.json")[0] ?? "";
 				writeFileSync(
@@ -488,6 +506,7 @@ export async function l10nGenerateTranslationService(
 
 	if (!matches.length) {
 		logger.log("No L10N JSON files.");
+
 		return;
 	}
 	logger.log(`Wrote ${matches.length * languages.length} L10N JSON files.`);

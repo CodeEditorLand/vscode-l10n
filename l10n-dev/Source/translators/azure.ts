@@ -15,6 +15,7 @@ import { NodeHtmlMarkdown } from "node-html-markdown";
 import { l10nJsonFormat } from "../common";
 
 const MAX_SIZE_OF_ARRAY_ELEMENT = 50000;
+
 const MAX_NUMBER_OF_ARRAY_ELEMENTS = 1000;
 // This is the request size times the number of languages
 const MAX_REQUEST_SIZE = 50000;
@@ -39,7 +40,9 @@ function translate(
 			region: config.azureTranslatorRegion,
 		},
 	);
+
 	const to = languages.join(",");
+
 	return client.path("/translate").post({
 		body,
 		queryParameters: {
@@ -64,8 +67,11 @@ async function batchTranslate(
 	config: { azureTranslatorKey: string; azureTranslatorRegion: string },
 ) {
 	const promises = [];
+
 	let partialBody: InputTextItem[] = [];
+
 	let currentCharacterCount = 0;
+
 	for (const item of body) {
 		if (item.text.length > MAX_SIZE_OF_ARRAY_ELEMENT) {
 			throw new Error(
@@ -73,6 +79,7 @@ async function batchTranslate(
 			);
 		}
 		const requestAddition = item.text.length * languages.length;
+
 		if (
 			currentCharacterCount + requestAddition > MAX_REQUEST_SIZE ||
 			partialBody.length === MAX_NUMBER_OF_ARRAY_ELEMENTS
@@ -90,6 +97,7 @@ async function batchTranslate(
 	}
 
 	const responses = await Promise.allSettled(promises);
+
 	const outputs: TranslatedTextItemOutput[] = [];
 
 	for (const response of responses) {
@@ -99,9 +107,12 @@ async function batchTranslate(
 					outputs.push(
 						...(response.value.body as TranslatedTextItemOutput[]),
 					);
+
 					break;
+
 				default: {
 					const error = response.value.body as ErrorResponseOutput;
+
 					throw new Error(
 						`Failed to translate: ${error.error.message}`,
 					);
@@ -117,6 +128,7 @@ async function batchTranslate(
 
 function handleSuccess(outputs: TranslatedTextItemOutput[], keys: string[]) {
 	const files: l10nJsonFormat[] = [];
+
 	for (let i = 0; i < outputs.length; i++) {
 		const output = outputs[i];
 		output?.translations.forEach((translation, languageIndex) => {
@@ -146,9 +158,12 @@ export async function azureTranslatorTranslate(
 	);
 
 	const body: InputTextItem[] = [];
+
 	const keys = Object.keys(dataToLocalize);
+
 	for (const key of keys) {
 		const value = dataToLocalize[key];
+
 		const message = typeof value === "string" ? value : value!.message;
 		// Render markdown to HTML since Azure Translator supports HTML and not markdown
 		const html = md.render(message);
@@ -157,5 +172,6 @@ export async function azureTranslatorTranslate(
 	}
 
 	const result = await batchTranslate(body, languages, config);
+
 	return handleSuccess(result, keys);
 }

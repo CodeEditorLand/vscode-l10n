@@ -17,8 +17,10 @@ import { unescapeString } from "./unescapeString";
 // Workaround for https://github.com/tree-sitter/tree-sitter/issues/1765
 try {
 	const matches = /^v(\d+).\d+.\d+$/.exec(process.version);
+
 	if (matches && matches[1]) {
 		const majorVersion = matches[1];
+
 		if (parseInt(majorVersion) >= 18) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
@@ -34,24 +36,30 @@ const initParser = Parser.init();
 export class ScriptAnalyzer {
 	static #tsParser: Promise<Parser> = (async () => {
 		await initParser;
+
 		const parser = new Parser();
 		parser.setLanguage(await ScriptAnalyzer.#tsGrammar);
+
 		return parser;
 	})();
 	static #tsxParser: Promise<Parser> = (async () => {
 		await initParser;
+
 		const parser = new Parser();
 		parser.setLanguage(await ScriptAnalyzer.#tsxGrammar);
+
 		return parser;
 	})();
 	static #tsGrammar: Promise<Parser.Language> = (async () => {
 		await initParser;
+
 		return await Parser.Language.load(
 			path.resolve(__dirname, "tree-sitter-typescript.wasm"),
 		);
 	})();
 	static #tsxGrammar: Promise<Parser.Language> = (async () => {
 		await initParser;
+
 		return await Parser.Language.load(
 			path.resolve(__dirname, "tree-sitter-tsx.wasm"),
 		);
@@ -59,6 +67,7 @@ export class ScriptAnalyzer {
 
 	#getCommentsFromMatch(match: QueryMatch): string[] {
 		const commentCapture = match.captures.find((c) => c.name === "comment");
+
 		if (!commentCapture) {
 			return [];
 		}
@@ -67,6 +76,7 @@ export class ScriptAnalyzer {
 			commentCapture.node.type === "template_string"
 		) {
 			const text = commentCapture.node.text;
+
 			return [this.#getUnquotedString(text)];
 		}
 
@@ -98,10 +108,12 @@ export class ScriptAnalyzer {
 		unescape: boolean,
 	): string | undefined {
 		const capture = match.captures.find((c) => c.name === id);
+
 		if (!capture) {
 			return undefined;
 		}
 		let text = capture.node.text;
+
 		if (capture.node.type === "template_string") {
 			text = this.#getTemplateValueFromTemplateRawValue(text);
 		}
@@ -115,6 +127,7 @@ export class ScriptAnalyzer {
 
 	#getUnquotedString(text: string): string {
 		const character = text[0];
+
 		if (character !== "'" && character !== '"' && character !== "`") {
 			return text;
 		}
@@ -131,6 +144,7 @@ export class ScriptAnalyzer {
 				"namespace",
 				false,
 			);
+
 			if (namespace) {
 				return importArg === "vscode"
 					? // import * as foo from 'vscode'
@@ -143,6 +157,7 @@ export class ScriptAnalyzer {
 				"namedImportAlias",
 				false,
 			);
+
 			return importArg === "vscode"
 				? // import { l10n as foo } from 'vscode' or import { l10n } from 'vscode'
 					{ l10n: namedImportAlias }
@@ -152,16 +167,19 @@ export class ScriptAnalyzer {
 
 		// we have required vscode or @vscode/l10n
 		const requireArg = this.#getStringFromMatch(match, "requireArg", false);
+
 		const propertyIdentifier = this.#getStringFromMatch(
 			match,
 			"propertyIdentifier",
 			false,
 		);
+
 		const variableName = this.#getStringFromMatch(
 			match,
 			"variableName",
 			false,
 		);
+
 		if (!propertyIdentifier) {
 			return requireArg === "vscode"
 				? // const a = require('vscode') or let a; a = require('vscode')
@@ -175,6 +193,7 @@ export class ScriptAnalyzer {
 				"propertyIdentifierAlias",
 				false,
 			);
+
 			return requireArg === "vscode"
 				? // const { l10n } = require('vscode') or const { l10n: foo } = require('vscode')
 					{ l10n: propertyIdentifierAlias }
@@ -199,16 +218,20 @@ export class ScriptAnalyzer {
 		}
 
 		let parser, grammar;
+
 		switch (extension) {
 			case ".jsx":
 			case ".tsx":
 				grammar = await ScriptAnalyzer.#tsxGrammar;
 				parser = await ScriptAnalyzer.#tsxParser;
+
 				break;
+
 			case ".js":
 			case ".ts":
 				grammar = await ScriptAnalyzer.#tsGrammar;
 				parser = await ScriptAnalyzer.#tsParser;
+
 				break;
 
 			default:
@@ -218,25 +241,33 @@ export class ScriptAnalyzer {
 		const parsed = parser.parse(contents);
 
 		const importQuery = grammar.query(importOrRequireQuery);
+
 		const importMatches = importQuery.matches(parsed.rootNode);
 
 		const bundle: l10nJsonFormat = {};
+
 		for (const importMatch of importMatches) {
 			const importDetails = this.#getImportDetails(importMatch);
+
 			const query = grammar.query(getTQuery(importDetails));
+
 			const matches = query.matches(parsed.rootNode);
+
 			for (const match of matches) {
 				const taggedTemplate = match.captures.find(
 					(c) => c.name === "tagged_template",
 				);
+
 				let message: string;
 				// handles l10n.t`foo`
 				if (taggedTemplate) {
 					const subs = match.captures.filter((c) => c.name === "sub");
+
 					const start = taggedTemplate.node.startIndex;
 					message = this.#getTemplateValueFromTemplateRawValue(
 						taggedTemplate.node.text,
 					);
+
 					for (let i = subs.length - 1; i >= 0; i--) {
 						const sub = subs[i]!;
 						message =
@@ -248,9 +279,11 @@ export class ScriptAnalyzer {
 				} else {
 					// handles l10n.t(`foo`)
 					message = this.#getStringFromMatch(match, "message", true)!;
+
 					const hasMessageTemplateArgs = match.captures.find(
 						(c) => c.name === "message_template_arg",
 					);
+
 					if (hasMessageTemplateArgs) {
 						throw new Error(
 							`Message '${message}' contains args via template substitution, i.e. 'l10n.t(\`$\{foo}\`)'. Please use double quotes and pass args, i.e. 'l10n.t(\`{0}\`, foo)'.`,
@@ -259,6 +292,7 @@ export class ScriptAnalyzer {
 				}
 
 				const comment = this.#getCommentsFromMatch(match);
+
 				if (comment.length) {
 					const key = `${message}/${comment.join("")}`;
 					bundle[key] = { message, comment };

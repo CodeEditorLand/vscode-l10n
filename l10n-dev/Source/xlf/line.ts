@@ -14,6 +14,7 @@ export class Line {
 
 	public append(value: string): Line {
 		this.buffer.push(value);
+
 		return this;
 	}
 

@@ -70,14 +70,17 @@ export function config(
 	}
 	if ("fsPath" in config) {
 		const fileContent = reader.readFileFromFsPath(config.fsPath);
+
 		const content = JSON.parse(fileContent);
 		bundle = isBuiltinExtension(content)
 			? content.contents.bundle
 			: content;
+
 		return;
 	}
 	if (config.uri) {
 		let uri = config.uri;
+
 		if (typeof config.uri === "string") {
 			uri = new URL(config.uri);
 		}
@@ -198,16 +201,22 @@ export function t(
 		  ]
 ): string {
 	const firstArg = args[0];
+
 	let key: string;
+
 	let message: string;
+
 	let formatArgs: Array<string | number> | Record<string, any> | undefined;
+
 	if (typeof firstArg === "string") {
 		key = firstArg;
 		message = firstArg;
 		args.splice(0, 1);
+
 		formatArgs = !args || typeof args[0] !== "object" ? args : args[0];
 	} else if (firstArg instanceof Array) {
 		const replacements = args.slice(1) as L10nReplacement[];
+
 		if (firstArg.length !== replacements.length + 1) {
 			throw new Error(
 				"expected a string as the first argument to l10n.t",
@@ -223,6 +232,7 @@ export function t(
 	} else {
 		message = firstArg.message;
 		key = message;
+
 		if (firstArg.comment && firstArg.comment.length > 0) {
 			// in the format: message/commentcommentcomment
 			key += `/${Array.isArray(firstArg.comment) ? firstArg.comment.join("") : firstArg.comment}`;
@@ -231,6 +241,7 @@ export function t(
 	}
 
 	const messageFromBundle = bundle?.[key];
+
 	if (!messageFromBundle) {
 		return format(message, formatArgs as Record<string, unknown>);
 	}

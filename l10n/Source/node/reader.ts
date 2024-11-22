@@ -21,6 +21,7 @@ export async function readFileFromUri(uri: URL): Promise<string> {
 
 		if (!res.ok) {
 			let error = `Unexpected ${res.status} response while trying to read ${uri}`;
+
 			try {
 				error += `: ${await res.text()}`;
 			} catch {
@@ -30,6 +31,7 @@ export async function readFileFromUri(uri: URL): Promise<string> {
 			throw new Error(error);
 		}
 		const decoded = await res.text();
+
 		return decoded;
 	}
 	throw new Error("Unsupported protocol");

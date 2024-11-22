@@ -14,6 +14,7 @@ import {
 import { Line } from "./line";
 
 const hashedIdSignal = "++CODE++";
+
 const hashedIdLength = 72; // 64 because it was a SHA256 hash + hashedIdSignal.length
 
 interface Item {
@@ -42,6 +43,7 @@ function getValue(node: any): string | undefined {
 
 	if (Array.isArray(node) && node.length === 1) {
 		const item = node[0];
+
 		if (typeof item === "string") {
 			return item;
 		}
@@ -68,14 +70,17 @@ export class XLF {
 		const filesSorted = [...this.files].sort((a, b) =>
 			a[0] > b[0] ? 1 : -1,
 		);
+
 		for (const [file, items] of filesSorted) {
 			this.appendNewLine(
 				`<file original="${file}" source-language="${this.sourceLanguage}" datatype="plaintext"><body>`,
 				2,
 			);
+
 			const itemsSorted = items.sort((a, b) =>
 				a.message > b.message ? 1 : -1,
 			);
+
 			for (const item of itemsSorted) {
 				this.addStringItem(item);
 			}
@@ -83,6 +88,7 @@ export class XLF {
 		}
 
 		this.appendFooter();
+
 		return this.buffer.join("\r\n");
 	}
 
@@ -91,6 +97,7 @@ export class XLF {
 			return;
 		}
 		this.files.set(key, []);
+
 		const existingKeys: Set<string> = new Set();
 
 		for (const id in bundle) {
@@ -100,6 +107,7 @@ export class XLF {
 			existingKeys.add(id);
 
 			const message = encodeEntities(getMessage(bundle[id]!));
+
 			const comment = getComment(bundle[id]!)
 				?.map((c) => encodeEntities(c))
 				.join(`\r\n`);
@@ -155,10 +163,13 @@ export class XLF {
 
 	static async parse(xlfString: string): Promise<l10nJsonDetails[]> {
 		const parser = new xml2js.Parser();
+
 		const files: l10nJsonDetails[] = [];
+
 		const result = await parser.parseStringPromise(xlfString);
 
 		const fileNodes: any[] = result["xliff"]["file"];
+
 		if (!fileNodes) {
 			throw new Error(
 				'XLIFF file does not contain "xliff" or "file" node(s) required for parsing.',
@@ -167,12 +178,14 @@ export class XLF {
 
 		fileNodes.forEach((file) => {
 			const name = file.$.original;
+
 			if (!name) {
 				throw new Error(
 					"XLIFF file node does not contain original attribute to determine the original location of the resource file.",
 				);
 			}
 			const language = file.$["target-language"].toLowerCase();
+
 			if (!language) {
 				throw new Error(
 					"XLIFF file node does not contain target-language attribute to determine translated language.",
@@ -180,7 +193,9 @@ export class XLF {
 			}
 
 			const messagesMap = new Map<string, string>();
+
 			const transUnits = file.body[0]["trans-unit"];
+
 			if (transUnits) {
 				transUnits.forEach((unit: any) => {
 					if (!unit.target) {
@@ -188,6 +203,7 @@ export class XLF {
 					}
 
 					const target = getValue(unit.target);
+
 					if (!target) {
 						throw new Error(
 							"XLIFF file does not contain full localization data. target node in one of the trans-unit nodes is not present.",
@@ -195,6 +211,7 @@ export class XLF {
 					}
 
 					let key: string;
+
 					if (
 						!unit.$.id.startsWith(hashedIdSignal) ||
 						unit.$.id.length !== hashedIdLength
@@ -202,6 +219,7 @@ export class XLF {
 						key = unit.$.id;
 					} else {
 						const source = getValue(unit.source);
+
 						if (!source) {
 							throw new Error(
 								"XLIFF file does not contain full localization data. source node in one of the trans-unit nodes is not present.",
@@ -210,6 +228,7 @@ export class XLF {
 
 						const note = getValue(unit.note);
 						key = source;
+
 						if (note) {
 							key += "/" + note.replace(/\r?\n/g, ""); // remove newlines
 						}
@@ -220,6 +239,7 @@ export class XLF {
 
 				// Sort result so it's predictable
 				const messages: { [key: string]: string } = {};
+
 				for (const key of [...messagesMap.keys()].sort()) {
 					messages[key] = messagesMap.get(key)!;
 				}
@@ -234,30 +254,46 @@ export class XLF {
 
 function encodeEntities(value: string): string {
 	const result: string[] = [];
+
 	for (let i = 0; i < value.length; i++) {
 		const ch = value[i]!;
+
 		switch (ch) {
 			case '"':
 				result.push("&quot;");
+
 				break;
+
 			case "'":
 				result.push("&apos;");
+
 				break;
+
 			case "<":
 				result.push("&lt;");
+
 				break;
+
 			case ">":
 				result.push("&gt;");
+
 				break;
+
 			case "&":
 				result.push("&amp;");
+
 				break;
+
 			case "\n":
 				result.push("&#10;");
+
 				break;
+
 			case "\r":
 				result.push("&#13;");
+
 				break;
+
 			default:
 				result.push(ch);
 		}

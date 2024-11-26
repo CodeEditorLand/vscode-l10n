@@ -1,6 +1,6 @@
 {
 	"devDependencies": {
-		"@types/node": "22.9.1"
+		"@types/node": "22.10.0"
 	},
 	"name": "vscode-l10n",
 	"scripts": {

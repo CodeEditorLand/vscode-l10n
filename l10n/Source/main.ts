@@ -54,6 +54,7 @@ export function config(config: { fsPath: string }): void;
  * @param config - An object that contains one property, uri, which should be a URL to the bundle.
  */
 export function config(config: { uri: string | URL }): Promise<void>;
+
 export function config(
 	config:
 		| { contents: string | l10nJsonFormat }
@@ -185,6 +186,7 @@ export function t(options: {
 	 */
 	comment: string | string[];
 }): string;
+
 export function t(
 	...args:
 		| [str: string, ...args: Array<string | number | boolean>]

@@ -143,6 +143,7 @@ function handleSuccess(outputs: TranslatedTextItemOutput[], keys: string[]) {
 }
 
 let md: markdownit | undefined;
+
 export async function azureTranslatorTranslate(
 	dataToLocalize: l10nJsonFormat,
 	languages: string[],

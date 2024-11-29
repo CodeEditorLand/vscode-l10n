@@ -9,6 +9,7 @@ export async function readFileFromUri(uri: URL): Promise<string> {
 
 		return await res.text();
 	}
+
 	throw new Error("Unsupported protocol");
 }
 

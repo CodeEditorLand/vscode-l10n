@@ -78,6 +78,7 @@ async function batchTranslate(
 				`Failed to translate. Item is too large: ${item.text}`,
 			);
 		}
+
 		const requestAddition = item.text.length * languages.length;
 
 		if (
@@ -85,10 +86,14 @@ async function batchTranslate(
 			partialBody.length === MAX_NUMBER_OF_ARRAY_ELEMENTS
 		) {
 			promises.push(translate(partialBody, languages, config));
+
 			partialBody = [];
+
 			currentCharacterCount = 0;
 		}
+
 		partialBody.push(item);
+
 		currentCharacterCount += requestAddition;
 	}
 
@@ -131,6 +136,7 @@ function handleSuccess(outputs: TranslatedTextItemOutput[], keys: string[]) {
 
 	for (let i = 0; i < outputs.length; i++) {
 		const output = outputs[i];
+
 		output?.translations.forEach((translation, languageIndex) => {
 			files[languageIndex] ??= {};
 			// Translate HTML back to markdown
@@ -139,6 +145,7 @@ function handleSuccess(outputs: TranslatedTextItemOutput[], keys: string[]) {
 			);
 		});
 	}
+
 	return files;
 }
 
@@ -150,6 +157,7 @@ export async function azureTranslatorTranslate(
 	config: { azureTranslatorKey: string; azureTranslatorRegion: string },
 ): Promise<l10nJsonFormat[]> {
 	md ??= markdownit();
+
 	client ??= TextTranslationClient(
 		"https://api.cognitive.microsofttranslator.com/",
 		{

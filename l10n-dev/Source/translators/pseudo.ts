@@ -26,7 +26,9 @@ export function pseudoLocalizedTranslate(
 			/(?:\(command:\S+)|(?:\$\([A-Za-z-~]+\))|(?:\{\S+\})/g,
 		)) {
 			const section = localize(message.substring(index, match.index));
+
 			localized += section + match[0]!;
+
 			index = match.index! + match[0]!.length;
 		}
 

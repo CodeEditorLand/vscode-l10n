@@ -60,6 +60,7 @@ yargs(hideBin(process.argv))
 				describe:
 					"TypeScript files to extract strings from. Supports folders and glob patterns.",
 			});
+
 			yargs.option("outDir", {
 				alias: "o",
 				string: true,
@@ -85,12 +86,14 @@ yargs(hideBin(process.argv))
 				describe:
 					"L10N JSON files to generate an XLF from. Supports folders and glob patterns.",
 			});
+
 			yargs.option("outFile", {
 				demandOption: true,
 				string: true,
 				describe: "Output file",
 				alias: "o",
 			});
+
 			yargs.option("language", {
 				alias: "l",
 				string: true,
@@ -119,6 +122,7 @@ yargs(hideBin(process.argv))
 				describe:
 					"XLF files to turn into `*.l10n.<language>.json` files. Supports folders and glob patterns.",
 			});
+
 			yargs.option("outDir", {
 				alias: "o",
 				string: true,
@@ -143,6 +147,7 @@ yargs(hideBin(process.argv))
 				describe:
 					"L10N JSON files to generate an XLF from. Supports folders and glob patterns.",
 			});
+
 			yargs.option("language", {
 				alias: "l",
 				string: true,
@@ -166,6 +171,7 @@ yargs(hideBin(process.argv))
 				describe:
 					"L10N JSON files to generate an XLF from. Supports folders and glob patterns.",
 			});
+
 			yargs.option("languages", {
 				alias: "l",
 				type: "string",
@@ -187,6 +193,7 @@ yargs(hideBin(process.argv))
 				],
 				describe: "The Pseudo language identifier that will be used.",
 			});
+
 			yargs.env("AZURE_TRANSLATOR");
 		},
 		async function (argv) {
@@ -195,11 +202,13 @@ yargs(hideBin(process.argv))
 					"AZURE_TRANSLATOR_KEY environment variable is not defined.",
 				);
 			}
+
 			if (!argv.region) {
 				throw new Error(
 					"AZURE_TRANSLATOR_REGION environment variable is not defined.",
 				);
 			}
+
 			await l10nGenerateTranslationService(
 				argv.path as string[],
 				argv.languages as string[],
@@ -249,6 +258,7 @@ export async function l10nExportStrings(
 
 		return;
 	}
+
 	logger.log(`Extracted ${stringsFound} strings...`);
 
 	let packageJSON;
@@ -260,6 +270,7 @@ export async function l10nExportStrings(
 	} catch (err) {
 		// Ignore
 	}
+
 	if (packageJSON) {
 		if (outDir) {
 			if (
@@ -281,13 +292,18 @@ export async function l10nExportStrings(
 
 			return;
 		}
+
 		outDir = outDir ?? ".";
 	}
+
 	const resolvedOutFile = path.resolve(
 		path.join(outDir!, "bundle.l10n.json"),
 	);
+
 	console.info(`Writing exported strings to: ${resolvedOutFile}`);
+
 	mkdirSync(path.resolve(outDir!), { recursive: true });
+
 	writeFileSync(resolvedOutFile, JSON.stringify(jsonResult, undefined, 2));
 }
 
@@ -316,6 +332,7 @@ export function l10nGenerateXlf(
 	for (const match of matches) {
 		if (match.endsWith(".l10n.json")) {
 			const name = path.basename(match).split(".l10n.json")[0] ?? "";
+
 			l10nFileContents.set(
 				name,
 				JSON.parse(readFileSync(path.resolve(match), "utf8")),
@@ -333,12 +350,15 @@ export function l10nGenerateXlf(
 
 		return;
 	}
+
 	logger.log(
 		`Found ${l10nFileContents.size} L10N JSON files. Generating XLF...`,
 	);
 
 	const result = getL10nXlf(l10nFileContents, { sourceLanguage: language });
+
 	writeFileSync(path.resolve(outFile), result);
+
 	logger.log(`Wrote XLF file to: ${outFile}`);
 }
 
@@ -377,10 +397,12 @@ export async function l10nImportXlf(
 
 	for (const xlfContents of xlfFiles) {
 		const details = await getL10nFilesFromXlf(xlfContents);
+
 		count += details.length;
 
 		for (const detail of details) {
 			const type = detail.name === "package" ? "nls" : "l10n";
+
 			writeFileSync(
 				path.resolve(
 					path.join(
@@ -392,6 +414,7 @@ export async function l10nImportXlf(
 			);
 		}
 	}
+
 	logger.log(`Wrote ${count} localized L10N JSON files to: ${outDir}`);
 }
 
@@ -418,6 +441,7 @@ export function l10nGeneratePseudo(paths: string[], language: string): void {
 
 		if (match.endsWith(".l10n.json")) {
 			const name = path.basename(match).split(".l10n.json")[0] ?? "";
+
 			writeFileSync(
 				path.resolve(
 					path.join(
@@ -445,6 +469,7 @@ export function l10nGeneratePseudo(paths: string[], language: string): void {
 
 		return;
 	}
+
 	logger.log(`Wrote ${matches.length} L10N JSON files.`);
 }
 
@@ -481,6 +506,7 @@ export async function l10nGenerateTranslationService(
 
 			if (match.endsWith(".l10n.json")) {
 				const name = path.basename(match).split(".l10n.json")[0] ?? "";
+
 				writeFileSync(
 					path.resolve(
 						path.join(
@@ -509,5 +535,6 @@ export async function l10nGenerateTranslationService(
 
 		return;
 	}
+
 	logger.log(`Wrote ${matches.length * languages.length} L10N JSON files.`);
 }

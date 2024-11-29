@@ -12,6 +12,7 @@ export type l10nJsonMessageFormat =
 	| string
 	| {
 			message: string;
+
 			comment: string[];
 	  };
 
@@ -29,7 +30,9 @@ export interface l10nJsonFormat {
  */
 export interface l10nJsonDetails {
 	messages: l10nJsonFormat;
+
 	name: string;
+
 	language: string;
 }
 
@@ -39,5 +42,6 @@ export interface l10nJsonDetails {
  */
 export interface IScriptFile {
 	contents: string;
+
 	extension: string;
 }

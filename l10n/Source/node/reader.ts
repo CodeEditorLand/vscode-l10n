@@ -10,6 +10,7 @@ export async function readFileFromUri(uri: URL): Promise<string> {
 	if (uri.protocol === "file:") {
 		return await readFile(uri, "utf8");
 	}
+
 	if (uri.protocol === "http:" || uri.protocol === "https:") {
 		const res = await fetch(uri.toString(), {
 			headers: {
@@ -30,10 +31,12 @@ export async function readFileFromUri(uri: URL): Promise<string> {
 
 			throw new Error(error);
 		}
+
 		const decoded = await res.text();
 
 		return decoded;
 	}
+
 	throw new Error("Unsupported protocol");
 }
 

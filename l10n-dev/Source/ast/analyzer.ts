@@ -38,18 +38,22 @@ export class ScriptAnalyzer {
 		await initParser;
 
 		const parser = new Parser();
+
 		parser.setLanguage(await ScriptAnalyzer.#tsGrammar);
 
 		return parser;
 	})();
+
 	static #tsxParser: Promise<Parser> = (async () => {
 		await initParser;
 
 		const parser = new Parser();
+
 		parser.setLanguage(await ScriptAnalyzer.#tsxGrammar);
 
 		return parser;
 	})();
+
 	static #tsGrammar: Promise<Parser.Language> = (async () => {
 		await initParser;
 
@@ -57,6 +61,7 @@ export class ScriptAnalyzer {
 			path.resolve(__dirname, "tree-sitter-typescript.wasm"),
 		);
 	})();
+
 	static #tsxGrammar: Promise<Parser.Language> = (async () => {
 		await initParser;
 
@@ -71,6 +76,7 @@ export class ScriptAnalyzer {
 		if (!commentCapture) {
 			return [];
 		}
+
 		if (
 			commentCapture.node.type === "string" ||
 			commentCapture.node.type === "template_string"
@@ -112,6 +118,7 @@ export class ScriptAnalyzer {
 		if (!capture) {
 			return undefined;
 		}
+
 		let text = capture.node.text;
 
 		if (capture.node.type === "template_string") {
@@ -152,6 +159,7 @@ export class ScriptAnalyzer {
 					: // import * as foo from '@vscode/l10n'
 						{ l10n: namespace };
 			}
+
 			const namedImportAlias = this.#getStringFromMatch(
 				match,
 				"namedImportAlias",
@@ -187,6 +195,7 @@ export class ScriptAnalyzer {
 				: // const a = require('@vscode/l10n') or let a; a = require('@vscode/l10n')
 					{ l10n: variableName };
 		}
+
 		if (!variableName) {
 			const propertyIdentifierAlias = this.#getStringFromMatch(
 				match,
@@ -200,6 +209,7 @@ export class ScriptAnalyzer {
 				: // const { t } = require('@vscode/l10n') or const { t: foo } = require('@vscode/l10n')
 					{ t: propertyIdentifierAlias };
 		}
+
 		return requireArg === "vscode"
 			? // const a = require('vscode').l10n or let a; a = require('vscode').l10n
 				{ l10n: variableName }
@@ -223,6 +233,7 @@ export class ScriptAnalyzer {
 			case ".jsx":
 			case ".tsx":
 				grammar = await ScriptAnalyzer.#tsxGrammar;
+
 				parser = await ScriptAnalyzer.#tsxParser;
 
 				break;
@@ -230,6 +241,7 @@ export class ScriptAnalyzer {
 			case ".js":
 			case ".ts":
 				grammar = await ScriptAnalyzer.#tsGrammar;
+
 				parser = await ScriptAnalyzer.#tsParser;
 
 				break;
@@ -264,17 +276,20 @@ export class ScriptAnalyzer {
 					const subs = match.captures.filter((c) => c.name === "sub");
 
 					const start = taggedTemplate.node.startIndex;
+
 					message = this.#getTemplateValueFromTemplateRawValue(
 						taggedTemplate.node.text,
 					);
 
 					for (let i = subs.length - 1; i >= 0; i--) {
 						const sub = subs[i]!;
+
 						message =
 							message.slice(0, sub.node.startIndex - start) +
 							`{${i}}` +
 							message.slice(sub.node.endIndex - start);
 					}
+
 					message = this.#getUnquotedString(message);
 				} else {
 					// handles l10n.t(`foo`)
@@ -295,12 +310,14 @@ export class ScriptAnalyzer {
 
 				if (comment.length) {
 					const key = `${message}/${comment.join("")}`;
+
 					bundle[key] = { message, comment };
 				} else {
 					bundle[message] = message;
 				}
 			}
 		}
+
 		return bundle;
 	}
 }

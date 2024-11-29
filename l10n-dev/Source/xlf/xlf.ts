@@ -19,7 +19,9 @@ const hashedIdLength = 72; // 64 because it was a SHA256 hash + hashedIdSignal.l
 
 interface Item {
 	id: string;
+
 	message: string;
+
 	comment?: string;
 }
 
@@ -34,9 +36,11 @@ function getValue(node: any): string | undefined {
 	if (!node) {
 		return undefined;
 	}
+
 	if (typeof node === "string") {
 		return node;
 	}
+
 	if (typeof node._ === "string") {
 		return node._;
 	}
@@ -47,17 +51,22 @@ function getValue(node: any): string | undefined {
 		if (typeof item === "string") {
 			return item;
 		}
+
 		if (typeof item._ === "string") {
 			return item._;
 		}
+
 		return node[0]._;
 	}
+
 	return undefined;
 }
 
 export class XLF {
 	private buffer: string[] = [];
+
 	private files = new Map<string, Item[]>();
+
 	private sourceLanguage: string;
 
 	constructor(options?: { sourceLanguage?: string }) {
@@ -84,6 +93,7 @@ export class XLF {
 			for (const item of itemsSorted) {
 				this.addStringItem(item);
 			}
+
 			this.appendNewLine("</body></file>", 2);
 		}
 
@@ -96,6 +106,7 @@ export class XLF {
 		if (Object.keys(bundle).length === 0) {
 			return;
 		}
+
 		this.files.set(key, []);
 
 		const existingKeys: Set<string> = new Set();
@@ -104,6 +115,7 @@ export class XLF {
 			if (existingKeys.has(id)) {
 				continue;
 			}
+
 			existingKeys.add(id);
 
 			const message = encodeEntities(getMessage(bundle[id]!));
@@ -111,6 +123,7 @@ export class XLF {
 			const comment = getComment(bundle[id]!)
 				?.map((c) => encodeEntities(c))
 				.join(`\r\n`);
+
 			this.files
 				.get(key)!
 				.push({ id: encodeEntities(id), message, comment });
@@ -130,7 +143,9 @@ export class XLF {
 					.update(item.id, "binary")
 					.digest("hex")
 			: item.id;
+
 		this.appendNewLine(`<trans-unit id="${encodeEntities(id)}">`, 4);
+
 		this.appendNewLine(
 			`<source xml:lang="${this.sourceLanguage}">${item.message}</source>`,
 			6,
@@ -145,6 +160,7 @@ export class XLF {
 
 	private appendHeader(): void {
 		this.appendNewLine('<?xml version="1.0" encoding="utf-8"?>', 0);
+
 		this.appendNewLine(
 			'<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">',
 			0,
@@ -157,7 +173,9 @@ export class XLF {
 
 	private appendNewLine(content: string, indent?: number): void {
 		const line = new Line(indent);
+
 		line.append(content);
+
 		this.buffer.push(line.toString());
 	}
 
@@ -184,6 +202,7 @@ export class XLF {
 					"XLIFF file node does not contain original attribute to determine the original location of the resource file.",
 				);
 			}
+
 			const language = file.$["target-language"].toLowerCase();
 
 			if (!language) {
@@ -227,6 +246,7 @@ export class XLF {
 						}
 
 						const note = getValue(unit.note);
+
 						key = source;
 
 						if (note) {
@@ -298,6 +318,7 @@ function encodeEntities(value: string): string {
 				result.push(ch);
 		}
 	}
+
 	return result.join("");
 }
 

@@ -14,6 +14,7 @@ export type l10nJsonMessageFormat =
 	| string
 	| {
 			message: string;
+
 			comment: string[];
 	  };
 
@@ -67,33 +68,40 @@ export function config(
 		} else {
 			bundle = config.contents;
 		}
+
 		return;
 	}
+
 	if ("fsPath" in config) {
 		const fileContent = reader.readFileFromFsPath(config.fsPath);
 
 		const content = JSON.parse(fileContent);
+
 		bundle = isBuiltinExtension(content)
 			? content.contents.bundle
 			: content;
 
 		return;
 	}
+
 	if (config.uri) {
 		let uri = config.uri;
 
 		if (typeof config.uri === "string") {
 			uri = new URL(config.uri);
 		}
+
 		return new Promise((resolve, reject) => {
 			reader
 				.readFileFromUri(uri as URL)
 				.then((uriContent) => {
 					try {
 						const content = JSON.parse(uriContent);
+
 						bundle = isBuiltinExtension(content)
 							? content.contents.bundle
 							: content;
+
 						resolve();
 					} catch (err) {
 						reject(err);
@@ -195,9 +203,11 @@ export function t(
 		| [
 				options: {
 					message: string;
+
 					args?:
 						| Array<string | number | boolean>
 						| Record<string, any>;
+
 					comment?: string | string[];
 				},
 		  ]
@@ -212,7 +222,9 @@ export function t(
 
 	if (typeof firstArg === "string") {
 		key = firstArg;
+
 		message = firstArg;
+
 		args.splice(0, 1);
 
 		formatArgs = !args || typeof args[0] !== "object" ? args : args[0];
@@ -233,12 +245,14 @@ export function t(
 		return t(str, ...replacements);
 	} else {
 		message = firstArg.message;
+
 		key = message;
 
 		if (firstArg.comment && firstArg.comment.length > 0) {
 			// in the format: message/commentcommentcomment
 			key += `/${Array.isArray(firstArg.comment) ? firstArg.comment.join("") : firstArg.comment}`;
 		}
+
 		formatArgs = (firstArg.args as any[]) ?? {};
 	}
 
@@ -258,6 +272,7 @@ export function t(
 			formatArgs as Record<string, unknown>,
 		);
 	}
+
 	return format(message, formatArgs as Record<string, unknown>);
 }
 
@@ -273,6 +288,7 @@ function format(template: string, values: Record<string, unknown>): string {
 	if (Object.keys(values).length === 0) {
 		return template;
 	}
+
 	return template.replace(
 		_format2Regexp,
 		(match, group) => (values[group] ?? match) as string,

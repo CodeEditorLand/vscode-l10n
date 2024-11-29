@@ -45,6 +45,7 @@ export const unescapeString = (text: string): string => {
 
 			case "x":
 				end = i + 4;
+
 				replace = String.fromCodePoint(
 					parseInt(text.slice(i + 2, end), 16),
 				); // hex escape, \xXX
@@ -55,15 +56,18 @@ export const unescapeString = (text: string): string => {
 
 				if (text[i + 2] === "{") {
 					end = text.indexOf("}") + 1; // unicode code point, \u{XX..}
+
 					int = text.slice(i + 3, end - 1);
 				} else {
 					end = i + 6; // unicode code point, \uXXXX
 					int = text.slice(i + 2, end - 1);
 				}
+
 				replace = String.fromCodePoint(parseInt(int, 16));
 
 				break;
 			}
+
 			default:
 				replace = next!;
 
@@ -71,6 +75,7 @@ export const unescapeString = (text: string): string => {
 		}
 
 		text = text.slice(0, i) + replace + text.slice(end);
+
 		i += replace.length;
 	}
 

@@ -34,6 +34,7 @@ export const logger = {
 			default:
 				break;
 		}
+
 		debug.enable(level);
 	},
 };

@@ -50,6 +50,7 @@ export async function getL10nJson(
 
 	for (const contents of fileContents) {
 		const result = await analyzer.analyze(contents);
+
 		bundles.push(result);
 
 		// Validation
@@ -88,9 +89,12 @@ export function getL10nXlf(
 
 	for (const [name, l10nBundle] of l10nFileContents) {
 		logger.debug(`Adding file ${name}...`);
+
 		xlf.addFile(name, l10nBundle);
+
 		logger.debug(`Added file ${name}.`);
 	}
+
 	logger.debug("Analyzed L10N files.");
 
 	return xlf.toString();
@@ -108,7 +112,9 @@ export async function getL10nFilesFromXlf(
 	logger.debug("Parsing XLF content...");
 
 	const details = await XLF.parse(xlfContents);
+
 	logger.debug(`Parsed XLF contents into ${details.length}.`);
+
 	details.forEach((detail) => {
 		logger.debug(
 			`Found ${detail.language} file with ${Object.keys(detail.messages).length} messages called '${detail.name}'.`,
@@ -119,6 +125,7 @@ export async function getL10nFilesFromXlf(
 			case "zh-hans":
 				// https://github.com/microsoft/vscode-loc/blob/ee1a0b34bb545253a8a28e6d21193052c478e32d/i18n/vscode-language-pack-zh-hans/package.json#L22
 				detail.language = "zh-cn";
+
 				logger.debug(
 					`Changed 'zh-hans' to 'zh-cn' for file: ${detail.name}.`,
 				);
@@ -128,6 +135,7 @@ export async function getL10nFilesFromXlf(
 			case "zh-hant":
 				// https://github.com/microsoft/vscode-loc/blob/ee1a0b34bb545253a8a28e6d21193052c478e32d/i18n/vscode-language-pack-zh-hant/package.json#L22
 				detail.language = "zh-tw";
+
 				logger.debug(
 					`Changed 'zh-hant' to 'zh-tw' for file: ${detail.name}.`,
 				);
@@ -154,6 +162,7 @@ export function getL10nPseudoLocalized(
 	logger.debug("Localizing data using pseudo-localization...");
 
 	const result = pseudoLocalizedTranslate(dataToLocalize);
+
 	logger.debug(`Pseudo-localized ${Object.keys(result).length} strings.`);
 
 	return result;
@@ -187,5 +196,6 @@ export async function getL10nAzureLocalized(
 	} else {
 		logger.debug("No strings localized.");
 	}
+
 	return result;
 }

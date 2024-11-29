@@ -5,7 +5,9 @@
 
 export interface IAlternativeVariableNames {
 	vscode?: string;
+
 	l10n?: string;
+
 	t?: string;
 }
 
@@ -20,6 +22,7 @@ const righthandSideQuery = `[
 	${requireQuery}
 	(member_expression
 		object: ${requireQuery}
+
 		property: (property_identifier) @propertyIdentifier (#match? @propertyIdentifier "^(l10n|t)$")
 	)
 ]`;

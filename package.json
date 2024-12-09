@@ -1,12 +1,13 @@
 {
-	"devDependencies": {
-		"@types/node": "22.10.1"
-	},
-	"name": "vscode-l10n",
+	"name": "@codeeditorland/l10n",
 	"scripts": {
 		"install:l10n": "cd l10n && npm install",
 		"install:l10n-dev": "cd l10n-dev && npm install",
 		"watch:l10n": "cd l10n-dev && npm run watch",
 		"watch:l10n-dev": "cd l10n-dev && npm run watch"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "22.10.1"
 	}
 }

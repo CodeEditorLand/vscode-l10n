@@ -1,6 +1,21 @@
 {
+	"name": "@codeeditorland/l10n-dev",
+	"description": "Development time npm module to generate strings bundles from TypeScript files",
+	"main": "dist/main.js",
+	"types": "dist/main.d.ts",
 	"bin": {
 		"vscode-l10n-dev": "./dist/cli.js"
+	},
+	"files": [
+		"dist/*"
+	],
+	"scripts": {
+		"build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
+		"build-wasm-tsx": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/tsx --output ./src/ast/tree-sitter-tsx.wasm",
+		"build-wasm-typescript": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/typescript --output ./src/ast/tree-sitter-typescript.wasm",
+		"clean": "rimraf dist && rimraf lib",
+		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
+		"prepublishOnly": "npm run lint && npm run compile && npm run test"
 	},
 	"dependencies": {
 		"debug": "4.3.7",
@@ -13,7 +28,6 @@
 		"xml2js": "0.6.2",
 		"yargs": "17.7.2"
 	},
-	"description": "Development time npm module to generate strings bundles from TypeScript files",
 	"devDependencies": {
 		"@types/debug": "4.1.12",
 		"@types/markdown-it": "14.1.2",
@@ -27,19 +41,5 @@
 		"rimraf": "6.0.1",
 		"tree-sitter-cli": "0.24.4",
 		"tree-sitter-typescript": "0.23.2"
-	},
-	"files": [
-		"dist/*"
-	],
-	"main": "dist/main.js",
-	"name": "@vscode/l10n-dev",
-	"scripts": {
-		"build-wasm": "npm run build-wasm-typescript && npm run build-wasm-tsx",
-		"build-wasm-tsx": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/tsx --output ./src/ast/tree-sitter-tsx.wasm",
-		"build-wasm-typescript": "tree-sitter build --wasm ./node_modules/tree-sitter-typescript/typescript --output ./src/ast/tree-sitter-typescript.wasm",
-		"clean": "rimraf dist && rimraf lib",
-		"compile": "npm run clean && tsc --emitDeclarationOnly --outDir lib && node .esbuild.config.mjs",
-		"prepublishOnly": "npm run lint && npm run compile && npm run test"
-	},
-	"types": "dist/main.d.ts"
+	}
 }

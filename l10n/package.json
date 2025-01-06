@@ -20,9 +20,9 @@
 	"devDependencies": {
 		"@types/mock-fs": "4.13.4",
 		"@types/node": "22",
-		"esbuild": "0.24.0",
+		"esbuild": "0.24.2",
 		"http-proxy-agent": "7.0.2",
-		"https-proxy-agent": "7.0.5",
+		"https-proxy-agent": "7.0.6",
 		"mock-fs": "5.4.1",
 		"rimraf": "6.0.1"
 	}
